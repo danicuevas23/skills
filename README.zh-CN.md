@@ -58,7 +58,7 @@ ln -s ~/Codes/skills/skill-permissions ~/.claude/skills/skill-permissions
 
 ## 在线文档
 
-本技能集有一个由 [share-skill](https://github.com/guo-yu/skills) 生成的在线文档网站。
+本技能集有一个由 [share-skill](https://github.com/guo-yu/skills/tree/master/share-skill) 生成的在线文档网站。
 
 ### 访问文档
 
@@ -69,7 +69,7 @@ https://skill.guoyu.me/
 
 **GitHub Pages：**
 ```
-https://guo-yu.github.io/skills/docs/
+https://guo-yu.github.io/skills/
 ```
 
 ### 配置 GitHub Pages

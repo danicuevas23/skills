@@ -58,7 +58,7 @@ Claude Code でスラッシュコマンドを使用：
 
 ## ドキュメント
 
-このスキルセットには [share-skill](https://github.com/guo-yu/skills) で生成されたオンラインドキュメントサイトがあります。
+このスキルセットには [share-skill](https://github.com/guo-yu/skills/tree/master/share-skill) で生成されたオンラインドキュメントサイトがあります。
 
 ### ドキュメントへのアクセス
 
@@ -69,7 +69,7 @@ https://skill.guoyu.me/
 
 **GitHub Pages：**
 ```
-https://guo-yu.github.io/skills/docs/
+https://guo-yu.github.io/skills/
 ```
 
 ### GitHub Pages の設定
