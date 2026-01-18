@@ -489,7 +489,29 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
    # Japanese: | [skill-name](./skill-name/) | 日本語説明 |
    ```
 
-   **8.4 Generate translations using skill-i18n**
+   **8.4 Update docs/index.html sidebar navigation**
+
+   Add new skill link to the sidebar navigation:
+   ```html
+   <!-- Find the sidebar-nav section and add before </nav> -->
+   <a class="sidebar-link" href="?skill=<skill-name>">
+       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+           <!-- Choose appropriate icon based on skill type -->
+       </svg>
+       <skill-name>
+   </a>
+   ```
+
+   **Icon selection guidelines:**
+   | Skill Type | Icon |
+   |------------|------|
+   | Port/Network | Clock/Circle icon |
+   | Sharing/Export | Share icon (circles with lines) |
+   | Security/Permissions | Lock icon |
+   | Translation/i18n | Globe icon |
+   | Default | Code icon or generic settings icon |
+
+   **8.5 Generate translations using skill-i18n**
 
    Automatically invoke skill-i18n to translate SKILL.md:
    ```bash
@@ -516,7 +538,7 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
      Install with: ln -s {skills_path}/skill-i18n ~/.claude/skills/skill-i18n
    ```
 
-   **8.5 Update cache version**
+   **8.6 Update cache version**
    ```bash
    # Update version numbers in docs/index.html
    VERSION=$(date +%s)
@@ -524,7 +546,7 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
    sed -i '' "s/custom.css?v=[0-9]*/custom.css?v=$VERSION/" {skills_path}/docs/index.html
    ```
 
-   **8.6 Commit all changes**
+   **8.7 Commit all changes**
    ```bash
    cd {skills_path}
    git add .
@@ -537,6 +559,7 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
    Post-migration updates completed:
      ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
      ✓ Updated README.md, README.zh-CN.md, README.ja.md
+     ✓ Updated docs/index.html (sidebar navigation)
      ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
      ✓ Updated cache version in docs/index.html
      ✓ Committed and pushed changes
@@ -576,6 +599,7 @@ Remote: git@github.com:guo-yu/skills/<skill-name>.git
 Post-migration updates:
   ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
   ✓ Updated README.md, README.zh-CN.md, README.ja.md
+  ✓ Updated docs/index.html (sidebar navigation)
   ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
   ✓ Updated cache version in docs/index.html
   ✓ Committed and pushed changes
@@ -595,6 +619,7 @@ Git: Initialized and committed
 Post-migration updates:
   ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
   ✓ Updated README.md, README.zh-CN.md, README.ja.md
+  ✓ Updated docs/index.html (sidebar navigation)
   ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
   ✓ Updated cache version in docs/index.html
   ✓ Committed changes (not pushed - no remote configured)
