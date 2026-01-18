@@ -3,27 +3,70 @@ const REPO_OWNER = 'guo-yu';
 const REPO_NAME = 'skills';
 const BRANCH = 'master';
 
+// i18n translations
+const I18N = {
+    en: {
+        skills: 'Skills',
+        onThisPage: 'On This Page',
+        loading: 'Loading documentation...',
+        installation: 'Installation',
+        installDesc: 'The easiest way to install:',
+        addMarketplace: 'Add marketplace',
+        installSkills: 'Install skills',
+        moreOptions: 'More installation options',
+        titleSuffix: "'s Skills"
+    },
+    'zh-CN': {
+        skills: '技能列表',
+        onThisPage: '本页目录',
+        loading: '加载文档中...',
+        installation: '安装方法',
+        installDesc: '最简单的安装方式：',
+        addMarketplace: '添加技能市场',
+        installSkills: '安装技能',
+        moreOptions: '更多安装选项',
+        titleSuffix: ' 的技能集'
+    },
+    ja: {
+        skills: 'スキル',
+        onThisPage: 'このページ',
+        loading: 'ドキュメントを読み込み中...',
+        installation: 'インストール',
+        installDesc: '最も簡単なインストール方法：',
+        addMarketplace: 'マーケットプレイスを追加',
+        installSkills: 'スキルをインストール',
+        moreOptions: 'その他のインストールオプション',
+        titleSuffix: ' のスキル'
+    }
+};
+
 // Skills configuration
 const SKILLS = {
     'port-allocator': {
         title: 'Port Allocator',
         description: '自动分配和管理开发服务器端口',
-        icon: '⚡'
+        icon: 'port'
     },
     'share-skill': {
         title: 'Share Skill',
         description: '将本地 skill 迁移到代码仓库',
-        icon: '🔗'
+        icon: 'share'
     },
     'skill-permissions': {
         title: 'Skill Permissions',
         description: '分析 skill 所需权限',
-        icon: '🔐'
+        icon: 'lock'
     }
 };
 
 // Default skill to show
 const DEFAULT_SKILL = 'port-allocator';
+
+// Current language
+let currentLang = localStorage.getItem('docs-lang') || 'en';
+
+// User info cache
+let userInfo = null;
 
 // Detect if running on GitHub Pages or locally
 function getBasePath(skillName) {
@@ -36,6 +79,91 @@ function getBasePath(skillName) {
     } else {
         return `../${skillName}/SKILL.md`;
     }
+}
+
+// Fetch GitHub user info
+async function fetchUserInfo() {
+    if (userInfo) return userInfo;
+
+    try {
+        const response = await fetch(`https://api.github.com/users/${REPO_OWNER}`);
+        if (response.ok) {
+            userInfo = await response.json();
+            return userInfo;
+        }
+    } catch (error) {
+        console.log('Could not fetch GitHub user info:', error);
+    }
+
+    // Fallback
+    return {
+        login: REPO_OWNER,
+        name: REPO_OWNER,
+        avatar_url: `https://github.com/${REPO_OWNER}.png`
+    };
+}
+
+// Update brand title with user name
+async function updateBrandTitle() {
+    const user = await fetchUserInfo();
+    const displayName = user.name || user.login;
+    const suffix = I18N[currentLang].titleSuffix;
+
+    // Update brand title
+    const brandTitle = document.getElementById('brandTitle');
+    if (brandTitle) {
+        brandTitle.innerHTML = `<span class="brand-name">${displayName}</span>${suffix}`;
+    }
+
+    // Update avatar
+    const avatar = document.getElementById('userAvatar');
+    if (avatar) {
+        avatar.src = user.avatar_url;
+        avatar.alt = displayName;
+    }
+
+    // Update page title
+    document.title = `${displayName}${suffix}`;
+}
+
+// Apply i18n translations
+function applyI18n() {
+    const translations = I18N[currentLang];
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[key]) {
+            el.textContent = translations[key];
+        }
+    });
+
+    // Update HTML lang attribute
+    document.documentElement.lang = currentLang === 'zh-CN' ? 'zh-CN' : (currentLang === 'ja' ? 'ja' : 'en');
+
+    // Update active language button
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+    });
+
+    // Update brand title
+    updateBrandTitle();
+}
+
+// Set language
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('docs-lang', lang);
+    applyI18n();
+}
+
+// Setup language switcher
+function setupLanguageSwitcher() {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const lang = btn.getAttribute('data-lang');
+            setLanguage(lang);
+        });
+    });
 }
 
 // Configure marked
@@ -102,10 +230,11 @@ async function loadDocumentation(skillName) {
     console.log('Path:', skillPath);
 
     try {
+        const loadingText = I18N[currentLang].loading;
         document.getElementById('content').innerHTML = `
             <div class="loading">
                 <div class="loading-spinner"></div>
-                <p>Loading documentation...</p>
+                <p>${loadingText}</p>
             </div>`;
 
         const response = await fetch(skillPath);
@@ -126,7 +255,9 @@ async function loadDocumentation(skillName) {
         document.getElementById('content').innerHTML = html;
 
         // Update page title
-        document.title = `${skill.title} - Claude Code Skills`;
+        const user = await fetchUserInfo();
+        const displayName = user.name || user.login;
+        document.title = `${skill.title} - ${displayName}${I18N[currentLang].titleSuffix}`;
 
         // Highlight code blocks
         document.querySelectorAll('pre code').forEach((block) => {
@@ -183,7 +314,18 @@ function handleNavigation() {
 }
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Setup language switcher
+    setupLanguageSwitcher();
+
+    // Apply initial i18n
+    applyI18n();
+
+    // Fetch user info and update UI
+    await fetchUserInfo();
+    await updateBrandTitle();
+
+    // Handle navigation
     handleNavigation();
     setupMobileMenuLinks();
 });

@@ -176,18 +176,66 @@ body {
     opacity: 0.9;
 }
 
-.brand-icon {
-    color: var(--color-primary);
+/* GitHub Avatar */
+.brand-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+    object-fit: cover;
 }
 
 .brand-text {
     font-family: var(--font-heading);
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
 }
 
-.brand-highlight {
-    color: var(--color-primary);
+.brand-name {
+    color: var(--color-primary-light);
+}
+
+/* Language Switcher */
+.lang-switcher {
+    display: flex;
+    gap: 0.25rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.25rem;
+    border-radius: 8px;
+    margin-right: 0.5rem;
+}
+
+.lang-btn {
+    padding: 0.375rem 0.75rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.lang-btn:hover {
+    color: var(--color-text);
+}
+
+.lang-btn.active {
+    background: var(--color-primary);
+    color: white;
+}
+
+.mobile-lang-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.mobile-lang-switcher .lang-btn {
+    flex: 1;
+    padding: 0.5rem;
 }
 
 .navbar-links {
@@ -338,7 +386,11 @@ body {
     padding-top: calc(var(--navbar-height) + 48px);
 }
 
-/* Sidebar */
+.main-container.three-column {
+    --sidebar-right-width: 280px;
+}
+
+/* Left Sidebar */
 .sidebar {
     position: fixed;
     top: calc(var(--navbar-height) + 48px);
@@ -348,6 +400,61 @@ body {
     border-radius: 16px;
     overflow-y: auto;
     z-index: 100;
+}
+
+/* Right Sidebar */
+.sidebar-right {
+    position: fixed;
+    top: calc(var(--navbar-height) + 48px);
+    right: 16px;
+    bottom: 16px;
+    width: var(--sidebar-right-width);
+    border-radius: 16px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.sidebar-right .install-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.sidebar-right .install-code {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+}
+
+.sidebar-right .install-code code {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+}
+
+.sidebar-right .install-code code:nth-child(2),
+.sidebar-right .install-code code:nth-child(5),
+.sidebar-right .install-code code:nth-child(6),
+.sidebar-right .install-code code:nth-child(7) {
+    color: var(--color-primary-light);
+}
+
+.sidebar-right .install-link {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: 0.5rem 0;
+    transition: color var(--transition-fast);
+}
+
+.sidebar-right .install-link:hover {
+    color: var(--color-primary-light);
 }
 
 .sidebar-content {
@@ -415,10 +522,15 @@ body {
     max-width: calc(100% - var(--sidebar-width) - 48px);
 }
 
+.three-column .main-content {
+    margin-right: calc(var(--sidebar-right-width) + 32px);
+    max-width: calc(100% - var(--sidebar-width) - var(--sidebar-right-width) - 80px);
+}
+
 .content-card {
     border-radius: 16px;
     padding: 2.5rem;
-    max-width: 900px;
+    max-width: 100%;
 }
 
 /* ===========================================
@@ -665,9 +777,20 @@ blockquote p {
 
 .footer {
     margin-left: calc(var(--sidebar-width) + 32px);
+    margin-right: calc(var(--sidebar-right-width, 0px) + 32px);
     padding: 2rem;
     text-align: center;
     color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.footer a {
+    color: var(--color-text-muted);
+}
+
+.footer a:hover {
+    color: var(--color-primary-light);
+    text-decoration: none;
 }
 
 .footer .heart {
@@ -718,6 +841,21 @@ blockquote p {
    Responsive Design
    =========================================== */
 
+@media (max-width: 1280px) {
+    .sidebar-right {
+        display: none;
+    }
+
+    .three-column .main-content {
+        margin-right: 16px;
+        max-width: calc(100% - var(--sidebar-width) - 48px);
+    }
+
+    .footer {
+        margin-right: 16px;
+    }
+}
+
 @media (max-width: 1024px) {
     .sidebar {
         width: 240px;
@@ -728,8 +866,18 @@ blockquote p {
         max-width: calc(100% - 240px - 48px);
     }
 
+    .three-column .main-content {
+        margin-left: calc(240px + 32px);
+        max-width: calc(100% - 240px - 48px);
+    }
+
     .footer {
         margin-left: calc(240px + 32px);
+        margin-right: 16px;
+    }
+
+    .lang-switcher {
+        display: none;
     }
 }
 
