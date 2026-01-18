@@ -1,18 +1,33 @@
+// Repository configuration
+const REPO_OWNER = 'guo-yu';
+const REPO_NAME = 'skills';
+const BRANCH = 'master';
+
+// Detect if running on GitHub Pages or locally
+function getBasePath(skillName) {
+    const isGitHubPages = window.location.hostname.includes('github.io');
+
+    if (isGitHubPages) {
+        // Use GitHub raw content URL
+        return `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${skillName}/SKILL.md`;
+    } else {
+        // Local development - use relative path
+        return `../${skillName}/SKILL.md`;
+    }
+}
+
 // Skills configuration
 const SKILLS = {
     'port-allocator': {
         title: 'Port Allocator',
-        path: '../port-allocator/SKILL.md',
         description: '自动分配和管理开发服务器端口'
     },
     'share-skill': {
         title: 'Share Skill',
-        path: '../share-skill/SKILL.md',
         description: '将本地 skill 迁移到代码仓库'
     },
     'skill-permissions': {
         title: 'Skill Permissions',
-        path: '../skill-permissions/SKILL.md',
         description: '分析 skill 所需权限'
     }
 };
@@ -82,10 +97,12 @@ async function loadDocumentation(skillName) {
         return;
     }
 
+    const skillPath = getBasePath(skillName);
+
     try {
         document.getElementById('content').innerHTML = '<div class="loading">Loading...</div>';
 
-        const response = await fetch(skill.path);
+        const response = await fetch(skillPath);
 
         if (!response.ok) {
             throw new Error(`Failed to load: ${response.status}`);
@@ -131,7 +148,7 @@ async function loadDocumentation(skillName) {
             <div class="alert alert-danger" role="alert">
                 <h4>Error Loading Documentation</h4>
                 <p>${error.message}</p>
-                <p>Make sure the SKILL.md file exists at: ${skill.path}</p>
+                <p>Path: ${skillPath}</p>
             </div>`;
     }
 }
