@@ -93,11 +93,15 @@ async function loadDocumentation(skillName) {
     }
 
     const skillPath = getBasePath(skillName);
+    console.log('Loading skill:', skillName);
+    console.log('Path:', skillPath);
+    console.log('Is GitHub Pages:', window.location.hostname.includes('github.io'));
 
     try {
         document.getElementById('content').innerHTML = '<div class="loading">Loading...</div>';
 
         const response = await fetch(skillPath);
+        console.log('Response status:', response.status);
 
         if (!response.ok) {
             throw new Error(`Failed to load: ${response.status}`);
