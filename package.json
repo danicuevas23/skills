@@ -1,0 +1,17 @@
+{
+  "name": "claude-code-skills",
+  "version": "1.0.0",
+  "description": "Claude Code Skills documentation site",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve . -l 3090",
+    "dev:python": "python3 -m http.server 3090"
+  },
+  "keywords": [
+    "claude-code",
+    "skills",
+    "documentation"
+  ],
+  "author": "guo-yu",
+  "license": "MIT"
+}

@@ -607,12 +607,33 @@ share-skill 支持自动生成优雅的文档网站，用于展示 skill 的使�
    mkdir -p ~/Codes/skills/docs/js
    ```
 
-5. **配置自定义域名**（可选）
+5. **创建 package.json**（如果不存在）
+
+   为了让 port-allocator 能为项目分配端口，需要创建 package.json：
+   ```json
+   {
+     "name": "claude-code-skills",
+     "version": "1.0.0",
+     "description": "Claude Code Skills documentation site",
+     "private": true,
+     "scripts": {
+       "dev": "npx serve . -l <分配的端口>",
+       "dev:python": "python3 -m http.server <分配的端口>"
+     }
+   }
+   ```
+
+   **端口分配流程：**
+   - 读取 `~/.claude/port-registry.json` 获取下一个可用端口
+   - 更新 port-registry 注册该项目
+   - 将分配的端口写入 package.json
+
+6. **配置自定义域名**（可选）
    ```bash
    echo "skill.guoyu.me" > ~/Codes/skills/docs/CNAME
    ```
 
-6. **提交并推送**
+7. **提交并推送**
    ```bash
    git add docs/
    git commit -m "Add documentation site"
