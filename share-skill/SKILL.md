@@ -675,10 +675,38 @@ share-skill 支持自动生成优雅的文档网站，用于展示 skill 的使�
    echo "skill.guoyu.me" > ~/Codes/skills/docs/CNAME
    ```
 
-7. **提交并推送**
+7. **更新缓存版本号**
+
+   每次修改 docs 内容时，自动更新资源文件的版本号以避免浏览器缓存问题：
+
+   ```bash
+   # 生成版本号（使用时间戳）
+   VERSION=$(date +%s)
+
+   # 更新 index.html 中的版本号
+   sed -i '' "s/main.js?v=[0-9]*/main.js?v=$VERSION/" docs/index.html
+   sed -i '' "s/custom.css?v=[0-9]*/custom.css?v=$VERSION/" docs/index.html
+   ```
+
+   **或者使用文件哈希：**
+   ```bash
+   JS_HASH=$(md5 -q docs/js/main.js | head -c 8)
+   CSS_HASH=$(md5 -q docs/css/custom.css | head -c 8)
+
+   sed -i '' "s/main.js?v=[a-z0-9]*/main.js?v=$JS_HASH/" docs/index.html
+   sed -i '' "s/custom.css?v=[a-z0-9]*/custom.css?v=$CSS_HASH/" docs/index.html
+   ```
+
+   **index.html 模板应包含版本占位符：**
+   ```html
+   <link rel="stylesheet" href="css/custom.css?v=1">
+   <script src="js/main.js?v=1"></script>
+   ```
+
+8. **提交并推送**
    ```bash
    git add docs/
-   git commit -m "Add documentation site"
+   git commit -m "Update documentation site"
    git push
    ```
 
