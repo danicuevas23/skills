@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Skills</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Highlight.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" id="hljs-theme">
+
+    <!-- Tocbot CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.css">
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="css/custom.css">
+
+    <script>
+        // Dark/Light mode on load
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+            document.documentElement.setAttribute('data-bs-theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <strong>Claude Code Skills</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Skills
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="?skill=port-allocator">port-allocator</a></li>
+                            <li><a class="dropdown-item" href="?skill=share-skill">share-skill</a></li>
+                            <li><a class="dropdown-item" href="?skill=skill-permissions">skill-permissions</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/guo-yu/skills" target="_blank">GitHub</a>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-secondary btn-sm" onclick="toggleTheme()" id="themeToggle">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid main-container">
+        <div class="row">
+            <!-- Sidebar: Skills List or TOC -->
+            <nav class="col-md-3 col-lg-2 d-none d-md-block sidebar">
+                <div class="sidebar-content">
+                    <div id="skills-list" class="mb-4">
+                        <h6 class="sidebar-heading">Skills</h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="?skill=port-allocator">port-allocator</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="?skill=share-skill">share-skill</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="?skill=skill-permissions">skill-permissions</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="toc-container">
+                        <h6 class="sidebar-heading">Table of Contents</h6>
+                        <div class="js-toc"></div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Documentation Content -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
+                <div class="js-toc-content" id="content">
+                    <div class="loading">Loading documentation...</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.32.2/tocbot.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
