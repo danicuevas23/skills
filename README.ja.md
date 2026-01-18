@@ -15,6 +15,7 @@
 | [port-allocator](./port-allocator/) | 開発サーバーポートの自動割り当てと管理、複数の Claude Code インスタンス間のポート競合を回避 |
 | [share-skill](./share-skill/) | ローカルスキルをコードリポジトリに移行、Git バージョン管理とオープンソース対応 |
 | [skill-permissions](./skill-permissions/) | スキルの必要な権限を分析し、ワンタイム認証コマンドを生成 |
+| [skill-i18n](./skill-i18n/) | SKILL.md と README.md を複数言語に翻訳し、スキルの国際共有を容易に |
 
 ## インストール
 
@@ -30,6 +31,7 @@
 /plugin install port-allocator@guo-yu-skills
 /plugin install share-skill@guo-yu-skills
 /plugin install skill-permissions@guo-yu-skills
+/plugin install skill-i18n@guo-yu-skills
 ```
 
 ### 手動インストール
@@ -44,6 +46,7 @@ git clone git@github.com:guo-yu/skills.git ~/Codes/skills
 ln -s ~/Codes/skills/port-allocator ~/.claude/skills/port-allocator
 ln -s ~/Codes/skills/share-skill ~/.claude/skills/share-skill
 ln -s ~/Codes/skills/skill-permissions ~/.claude/skills/skill-permissions
+ln -s ~/Codes/skills/skill-i18n ~/.claude/skills/skill-i18n
 ```
 
 ## 使用方法
@@ -54,6 +57,7 @@ Claude Code でスラッシュコマンドを使用：
 /port-allocator          # ポートの照会/割り当て
 /share-skill <name>      # スキルをオープンソース化
 /skill-permissions       # スキル権限を分析
+/skill-i18n <name>       # スキルを複数言語に翻訳
 ```
 
 ## ドキュメント

@@ -15,6 +15,7 @@ My collection of custom Claude Code skills for productivity and automation.
 | [port-allocator](./port-allocator/) | Automatically allocate and manage development server ports, avoiding port conflicts between multiple Claude Code instances |
 | [share-skill](./share-skill/) | Migrate local skills to code repositories with Git version control and open source support |
 | [skill-permissions](./skill-permissions/) | Analyze skill permissions and generate one-time authorization commands |
+| [skill-i18n](./skill-i18n/) | Translate SKILL.md and README.md files into multiple languages for sharing skills internationally |
 
 ## Installation
 
@@ -30,6 +31,7 @@ The easiest way to install is via Claude Code's plugin marketplace:
 /plugin install port-allocator@guo-yu-skills
 /plugin install share-skill@guo-yu-skills
 /plugin install skill-permissions@guo-yu-skills
+/plugin install skill-i18n@guo-yu-skills
 ```
 
 ### Manual Installation
@@ -44,6 +46,7 @@ git clone git@github.com:guo-yu/skills.git ~/Codes/skills
 ln -s ~/Codes/skills/port-allocator ~/.claude/skills/port-allocator
 ln -s ~/Codes/skills/share-skill ~/.claude/skills/share-skill
 ln -s ~/Codes/skills/skill-permissions ~/.claude/skills/skill-permissions
+ln -s ~/Codes/skills/skill-i18n ~/.claude/skills/skill-i18n
 ```
 
 ## Usage
@@ -54,6 +57,7 @@ Use slash commands in Claude Code:
 /port-allocator          # Query/allocate ports
 /share-skill <name>      # Open source a skill
 /skill-permissions       # Analyze skill permissions
+/skill-i18n <name>       # Translate skill to multiple languages
 ```
 
 ## Documentation
