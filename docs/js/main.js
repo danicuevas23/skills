@@ -375,6 +375,24 @@ function renderSkillLists() {
     }
 }
 
+// Render install code dynamically
+function renderInstallCode() {
+    const installCode = document.getElementById('installCode');
+    if (!installCode) return;
+
+    const t = I18N[currentLang];
+    const repoSlug = `${REPO_OWNER}-${REPO_NAME}`;
+    const skillCommands = Object.keys(SKILLS)
+        .map(id => `<span class="cmd">/plugin install ${id}@${repoSlug}</span>`)
+        .join('\n');
+
+    installCode.innerHTML = `<pre><code><span class="comment"># <span data-i18n="addMarketplace">${t.addMarketplace}</span></span>
+<span class="cmd">/plugin marketplace add ${REPO_OWNER}/${REPO_NAME}</span>
+
+<span class="comment"># <span data-i18n="installSkills">${t.installSkills}</span></span>
+${skillCommands}</code></pre>`;
+}
+
 // Default skill to show
 const DEFAULT_SKILL = 'port-allocator';
 
@@ -487,6 +505,9 @@ function setLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('docs-lang', lang);
     applyI18n();
+
+    // Update install code with new language
+    renderInstallCode();
 
     // Reload documentation with new language
     const skillName = getCurrentSkill();
@@ -707,6 +728,9 @@ function handleNavigation() {
 document.addEventListener('DOMContentLoaded', async () => {
     // Render dynamic skill lists
     renderSkillLists();
+
+    // Render install code
+    renderInstallCode();
 
     // Setup language switcher
     setupLanguageSwitcher();

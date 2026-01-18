@@ -65,6 +65,87 @@ Throughout this document, the following variables are used:
 - `{skills_path}` → `{code_root}/{skills_repo}` (e.g., `~/Codes/skills`)
 - `{username}` → Value of `github_username` config
 
+## Plugin Marketplace
+
+share-skill automatically creates a Claude Code Plugin Marketplace structure, enabling users to install skills via the `/plugin` command.
+
+### Installation via Marketplace
+
+Once your skills repository is set up, users can install skills with:
+
+```bash
+# Add the marketplace (one-time setup)
+/plugin marketplace add {username}/{skills_repo}
+
+# Install individual skills
+/plugin install port-allocator@{username}-{skills_repo}
+/plugin install share-skill@{username}-{skills_repo}
+```
+
+### Marketplace Structure
+
+The repository requires two types of manifest files:
+
+**1. Root marketplace.json** (`{skills_path}/.claude-plugin/marketplace.json`):
+```json
+{
+  "name": "{username}-{skills_repo}",
+  "owner": {
+    "name": "{display-name}",
+    "email": "{username}@users.noreply.github.com"
+  },
+  "metadata": {
+    "description": "A collection of productivity skills for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "skill-name",
+      "source": "./skill-name",
+      "description": "Skill description from SKILL.md frontmatter"
+    }
+  ]
+}
+```
+
+**2. Plugin manifest** (`{skills_path}/<skill-name>/.claude-plugin/plugin.json`):
+```json
+{
+  "name": "skill-name",
+  "description": "Skill description",
+  "version": "1.0.0"
+}
+```
+
+### Directory Structure with Plugin Support
+
+```
+{skills_path}/
+├── .claude-plugin/
+│   └── marketplace.json         # Root marketplace config
+├── port-allocator/
+│   ├── .claude-plugin/
+│   │   └── plugin.json          # Plugin manifest
+│   ├── SKILL.md
+│   └── ...
+├── share-skill/
+│   ├── .claude-plugin/
+│   │   └── plugin.json
+│   ├── SKILL.md
+│   └── ...
+└── docs/
+    └── ...
+```
+
+### Marketplace Commands Reference
+
+| Command | Description |
+|---------|-------------|
+| `/plugin marketplace add <repo>` | Add a marketplace (GitHub: `owner/repo`) |
+| `/plugin marketplace update` | Update all marketplace indexes |
+| `/plugin install <name>@<marketplace>` | Install a plugin from marketplace |
+| `/plugin validate .` | Validate marketplace structure |
+
 ### Auto-detection on First Run
 
 On first invocation of share-skill, it automatically detects settings:
@@ -538,11 +619,53 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
    sed -i '' "s/custom.css?v=[0-9]*/custom.css?v=$VERSION/" {skills_path}/docs/index.html
    ```
 
-   **8.7 Commit all changes**
+   **8.7 Create/Update Plugin Marketplace structure**
+
+   To enable installation via `/plugin marketplace`, create the plugin manifest files:
+
+   ```bash
+   # Create plugin.json for the new skill
+   mkdir -p {skills_path}/<skill-name>/.claude-plugin
+   cat > {skills_path}/<skill-name>/.claude-plugin/plugin.json << EOF
+   {
+     "name": "<skill-name>",
+     "description": "<extracted from SKILL.md frontmatter>",
+     "version": "1.0.0"
+   }
+   EOF
+   ```
+
+   Update the root marketplace.json to include the new skill:
+   ```bash
+   # Read existing marketplace.json and add new plugin entry
+   # File: {skills_path}/.claude-plugin/marketplace.json
+
+   # Add to plugins array:
+   {
+     "name": "<skill-name>",
+     "source": "./<skill-name>",
+     "description": "<extracted from SKILL.md frontmatter>"
+   }
+   ```
+
+   **Marketplace structure after migration:**
+   ```
+   {skills_path}/
+   ├── .claude-plugin/
+   │   └── marketplace.json          # Root marketplace config
+   ├── <skill-name>/
+   │   ├── .claude-plugin/
+   │   │   └── plugin.json           # Plugin manifest
+   │   ├── SKILL.md
+   │   └── ...
+   └── ...
+   ```
+
+   **8.8 Commit all changes**
    ```bash
    cd {skills_path}
    git add .
-   git commit -m "Add <skill-name>: update docs, README, and translations"
+   git commit -m "Add <skill-name>: update docs, README, translations, and plugin manifest"
    git push  # If remote is configured
    ```
 
@@ -553,10 +676,12 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
      ✓ Updated README.md, README.zh-CN.md, README.ja.md
      ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
      ✓ Updated cache version in docs/index.html
+     ✓ Created .claude-plugin/plugin.json
+     ✓ Updated .claude-plugin/marketplace.json
      ✓ Committed and pushed changes
 
-   Note: Skill lists (navbar, mobile menu, sidebar) are dynamically
-   generated from SKILLS config - no HTML changes needed.
+   Note: Skill lists (navbar, mobile menu, sidebar, install commands) are
+   dynamically generated from SKILLS config - no HTML editing needed.
    ```
 
 ### Command: `/share-skill list`

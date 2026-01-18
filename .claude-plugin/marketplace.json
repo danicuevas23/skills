@@ -1,0 +1,33 @@
+{
+  "name": "guo-yu-skills",
+  "owner": {
+    "name": "Guo Yu",
+    "email": "guo-yu@users.noreply.github.com"
+  },
+  "metadata": {
+    "description": "A collection of productivity skills for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "port-allocator",
+      "source": "./port-allocator",
+      "description": "Automatically allocate and manage development server ports, avoiding port conflicts between multiple Claude Code instances"
+    },
+    {
+      "name": "share-skill",
+      "source": "./share-skill",
+      "description": "Migrate local skills to code repositories with Git version control and open source support"
+    },
+    {
+      "name": "skill-permissions",
+      "source": "./skill-permissions",
+      "description": "Analyze skill permissions and generate one-time authorization commands"
+    },
+    {
+      "name": "skill-i18n",
+      "source": "./skill-i18n",
+      "description": "Translate SKILL.md and README.md files into multiple languages for sharing skills internationally"
+    }
+  ]
+}
