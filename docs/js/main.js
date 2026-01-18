@@ -313,29 +313,67 @@ const SKILL_MARKETING = {
     }
 };
 
-// Skills configuration
+// Skills configuration with SVG icons
 const SKILLS = {
     'port-allocator': {
         title: 'Port Allocator',
         description: '自动分配和管理开发服务器端口',
-        icon: 'port'
+        icon: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
     },
     'share-skill': {
         title: 'Share Skill',
         description: '将本地 skill 迁移到代码仓库',
-        icon: 'share'
+        icon: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>'
     },
     'skill-permissions': {
         title: 'Skill Permissions',
         description: '分析 skill 所需权限',
-        icon: 'lock'
+        icon: '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'
     },
     'skill-i18n': {
         title: 'Skill i18n',
         description: '将 SKILL.md 翻译成多语言版本',
-        icon: 'globe'
+        icon: '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'
     }
 };
+
+// Generate skill icon SVG
+function skillIcon(skillId, size = 18) {
+    const skill = SKILLS[skillId];
+    if (!skill) return '';
+    return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${skill.icon}</svg>`;
+}
+
+// Render skill lists dynamically
+function renderSkillLists() {
+    const currentSkill = new URLSearchParams(window.location.search).get('skill') || DEFAULT_SKILL;
+
+    // 1. Navbar dropdown
+    const navDropdown = document.getElementById('navSkillList');
+    if (navDropdown) {
+        navDropdown.innerHTML = Object.keys(SKILLS).map(id => `
+            <a href="?skill=${id}">${skillIcon(id, 16)} ${id}</a>
+        `).join('');
+    }
+
+    // 2. Mobile menu
+    const mobileMenu = document.getElementById('mobileSkillList');
+    if (mobileMenu) {
+        mobileMenu.innerHTML = Object.keys(SKILLS).map(id => `
+            <a href="?skill=${id}">${id}</a>
+        `).join('');
+    }
+
+    // 3. Sidebar
+    const sidebar = document.getElementById('sidebarSkillList');
+    if (sidebar) {
+        sidebar.innerHTML = Object.keys(SKILLS).map(id => `
+            <a class="sidebar-link${id === currentSkill ? ' active' : ''}" href="?skill=${id}">
+                ${skillIcon(id)} ${id}
+            </a>
+        `).join('');
+    }
+}
 
 // Default skill to show
 const DEFAULT_SKILL = 'port-allocator';
@@ -667,6 +705,9 @@ function handleNavigation() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
+    // Render dynamic skill lists
+    renderSkillLists();
+
     // Setup language switcher
     setupLanguageSwitcher();
 

@@ -489,27 +489,19 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
    # Japanese: | [skill-name](./skill-name/) | 日本語説明 |
    ```
 
-   **8.4 Update docs/index.html sidebar navigation**
+   **8.4 (Automatic) Skill lists are dynamically generated**
 
-   Add new skill link to the sidebar navigation:
-   ```html
-   <!-- Find the sidebar-nav section and add before </nav> -->
-   <a class="sidebar-link" href="?skill=<skill-name>">
-       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-           <!-- Choose appropriate icon based on skill type -->
-       </svg>
-       <skill-name>
-   </a>
-   ```
+   The skill lists in navigation dropdown, mobile menu, and sidebar are
+   dynamically generated from the `SKILLS` object in `main.js`. No manual
+   HTML editing required - step 8.1 handles this automatically.
 
-   **Icon selection guidelines:**
-   | Skill Type | Icon |
-   |------------|------|
-   | Port/Network | Clock/Circle icon |
-   | Sharing/Export | Share icon (circles with lines) |
-   | Security/Permissions | Lock icon |
-   | Translation/i18n | Globe icon |
-   | Default | Code icon or generic settings icon |
+   **Icon SVG path guidelines** (for step 8.1):
+   | Skill Type | SVG Icon Path |
+   |------------|---------------|
+   | Port/Network | `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>` |
+   | Sharing/Export | `<circle cx="18" cy="5" r="3"/>...(share icon)` |
+   | Security/Permissions | `<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>` |
+   | Translation/i18n | `<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3..."/>` |
 
    **8.5 Generate translations using skill-i18n**
 
@@ -559,10 +551,12 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
    Post-migration updates completed:
      ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
      ✓ Updated README.md, README.zh-CN.md, README.ja.md
-     ✓ Updated docs/index.html (sidebar navigation)
      ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
      ✓ Updated cache version in docs/index.html
      ✓ Committed and pushed changes
+
+   Note: Skill lists (navbar, mobile menu, sidebar) are dynamically
+   generated from SKILLS config - no HTML changes needed.
    ```
 
 ### Command: `/share-skill list`
@@ -599,7 +593,6 @@ Remote: git@github.com:guo-yu/skills/<skill-name>.git
 Post-migration updates:
   ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
   ✓ Updated README.md, README.zh-CN.md, README.ja.md
-  ✓ Updated docs/index.html (sidebar navigation)
   ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
   ✓ Updated cache version in docs/index.html
   ✓ Committed and pushed changes
@@ -619,7 +612,6 @@ Git: Initialized and committed
 Post-migration updates:
   ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
   ✓ Updated README.md, README.zh-CN.md, README.ja.md
-  ✓ Updated docs/index.html (sidebar navigation)
   ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
   ✓ Updated cache version in docs/index.html
   ✓ Committed changes (not pushed - no remote configured)
