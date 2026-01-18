@@ -433,6 +433,115 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
    - Skip for now
    ```
 
+8. **Post-migration automation (automatic, no interaction)**
+
+   After migration completes, automatically update all related files:
+
+   **8.1 Update docs/js/main.js SKILLS config**
+   ```javascript
+   // Add new skill to SKILLS object
+   const SKILLS = {
+       // ... existing skills
+       '<skill-name>': {
+           name: '<skill-name>',
+           description: '<extracted from SKILL.md frontmatter>',
+           path: '<skill-name>'
+       }
+   };
+   ```
+
+   **8.2 Update docs/js/main.js SKILL_MARKETING config**
+   ```javascript
+   // Generate marketing content for the new skill
+   const SKILL_MARKETING = {
+       // ... existing skills
+       '<skill-name>': {
+           en: {
+               headline: '<generated from skill description>',
+               why: '<generated explanation>',
+               painPoints: [
+                   { icon: '🔥', title: '...', desc: '...' },
+                   { icon: '🧠', title: '...', desc: '...' },
+                   { icon: '💥', title: '...', desc: '...' }
+               ]
+           },
+           'zh-CN': { /* Chinese translation */ },
+           ja: { /* Japanese translation */ }
+       }
+   };
+   ```
+
+   **8.3 Update all README files**
+
+   Add new skill to the skills table in all language versions:
+   ```bash
+   # Files to update:
+   # - {skills_path}/README.md
+   # - {skills_path}/README.zh-CN.md
+   # - {skills_path}/README.ja.md
+
+   # Extract description from SKILL.md frontmatter
+   DESCRIPTION=$(grep -A1 "^description:" {skills_path}/<skill-name>/SKILL.md | tail -1 | sed 's/^description: //')
+
+   # Add row to skills table in each README
+   # English: | [skill-name](./skill-name/) | Description |
+   # Chinese: | [skill-name](./skill-name/) | 中文描述 |
+   # Japanese: | [skill-name](./skill-name/) | 日本語説明 |
+   ```
+
+   **8.4 Generate translations using skill-i18n**
+
+   Automatically invoke skill-i18n to translate SKILL.md:
+   ```bash
+   # Check if skill-i18n is available
+   if [ -d ~/.claude/skills/skill-i18n ] || [ -L ~/.claude/skills/skill-i18n ]; then
+     # Use Skill tool to invoke skill-i18n with integration flags
+     # Skill: skill-i18n
+     # Args: --lang zh-CN,ja --files SKILL.md --skill <skill-name> --no-prompt --overwrite
+     #
+     # This generates:
+     # - {skills_path}/<skill-name>/SKILL.zh-CN.md
+     # - {skills_path}/<skill-name>/SKILL.ja.md
+   fi
+   ```
+
+   **Implementation:** Use the `Skill` tool to invoke skill-i18n:
+   ```
+   Skill(skill: "skill-i18n", args: "--lang zh-CN,ja --files SKILL.md --skill <skill-name> --no-prompt --overwrite")
+   ```
+
+   If skill-i18n is not available, skip this step and output:
+   ```
+   ⚠ skill-i18n not found, skipping translations
+     Install with: ln -s {skills_path}/skill-i18n ~/.claude/skills/skill-i18n
+   ```
+
+   **8.5 Update cache version**
+   ```bash
+   # Update version numbers in docs/index.html
+   VERSION=$(date +%s)
+   sed -i '' "s/main.js?v=[0-9]*/main.js?v=$VERSION/" {skills_path}/docs/index.html
+   sed -i '' "s/custom.css?v=[0-9]*/custom.css?v=$VERSION/" {skills_path}/docs/index.html
+   ```
+
+   **8.6 Commit all changes**
+   ```bash
+   cd {skills_path}
+   git add .
+   git commit -m "Add <skill-name>: update docs, README, and translations"
+   git push  # If remote is configured
+   ```
+
+   **Post-migration output:**
+   ```
+   Post-migration updates completed:
+     ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
+     ✓ Updated README.md, README.zh-CN.md, README.ja.md
+     ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
+     ✓ Updated cache version in docs/index.html
+     ✓ Committed and pushed changes
+   ```
+
 ### Command: `/share-skill list`
 
 List all local skills available for migration (excluding symlinks):
@@ -463,7 +572,13 @@ New location: {skills_path}/<skill-name>
 Symlink: ~/.claude/skills/<skill-name> -> {skills_path}/<skill-name>
 Git: Initialized and committed
 Remote: git@github.com:guo-yu/skills/<skill-name>.git
-Pushed to remote
+
+Post-migration updates:
+  ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
+  ✓ Updated README.md, README.zh-CN.md, README.ja.md
+  ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
+  ✓ Updated cache version in docs/index.html
+  ✓ Committed and pushed changes
 
 Repository URL: https://github.com/guo-yu/skills
 ```
@@ -476,6 +591,13 @@ skill: <skill-name>
 New location: {skills_path}/<skill-name>
 Symlink: ~/.claude/skills/<skill-name> -> {skills_path}/<skill-name>
 Git: Initialized and committed
+
+Post-migration updates:
+  ✓ Updated docs/js/main.js (SKILLS + SKILL_MARKETING)
+  ✓ Updated README.md, README.zh-CN.md, README.ja.md
+  ✓ Generated SKILL.zh-CN.md, SKILL.ja.md
+  ✓ Updated cache version in docs/index.html
+  ✓ Committed changes (not pushed - no remote configured)
 
 Do you want to configure remote address?
 ```
