@@ -245,6 +245,71 @@ const SKILL_MARKETING = {
                 }
             ]
         }
+    },
+    'skill-i18n': {
+        en: {
+            headline: 'Make your skills accessible to developers worldwide',
+            why: 'You built an amazing skill, but it only speaks one language. International developers can\'t use it, can\'t discover it, and won\'t adopt it. Skill i18n automatically translates your SKILL.md into multiple languages, expanding your reach from local to global.',
+            painPoints: [
+                {
+                    icon: '🌍',
+                    title: 'Skills trapped in one language',
+                    desc: 'Your English-only documentation excludes millions of developers who would benefit from your skill.'
+                },
+                {
+                    icon: '⏰',
+                    title: 'Manual translation is tedious',
+                    desc: 'Translating documentation by hand takes hours and requires language expertise you may not have.'
+                },
+                {
+                    icon: '🔄',
+                    title: 'Translations get out of sync',
+                    desc: 'Every update to the original requires re-translating. Automated i18n keeps all versions aligned.'
+                }
+            ]
+        },
+        'zh-CN': {
+            headline: '让你的技能触达全球开发者',
+            why: '你创建了一个很棒的技能，但它只支持一种语言。国际开发者无法使用、无法发现、也不会采用它。Skill i18n 自动将你的 SKILL.md 翻译成多种语言，让你的技能从本地走向全球。',
+            painPoints: [
+                {
+                    icon: '🌍',
+                    title: '技能被困在单一语言中',
+                    desc: '只有英文的文档排除了数百万可能从你的技能中受益的开发者。'
+                },
+                {
+                    icon: '⏰',
+                    title: '手动翻译太繁琐',
+                    desc: '手工翻译文档需要数小时，还需要你可能不具备的语言专业知识。'
+                },
+                {
+                    icon: '🔄',
+                    title: '翻译版本不同步',
+                    desc: '每次更新原文都需要重新翻译。自动化 i18n 让所有版本保持一致。'
+                }
+            ]
+        },
+        ja: {
+            headline: 'あなたのスキルを世界中の開発者に届ける',
+            why: '素晴らしいスキルを作りましたが、一つの言語しか対応していません。海外の開発者は使えず、発見できず、採用しません。Skill i18nはSKILL.mdを自動的に複数言語に翻訳し、ローカルからグローバルへリーチを拡大します。',
+            painPoints: [
+                {
+                    icon: '🌍',
+                    title: 'スキルが一言語に閉じ込められている',
+                    desc: '英語のみのドキュメントは、あなたのスキルから恩恵を受ける何百万人もの開発者を除外しています。'
+                },
+                {
+                    icon: '⏰',
+                    title: '手動翻訳は面倒',
+                    desc: 'ドキュメントを手作業で翻訳するには何時間もかかり、持っていないかもしれない語学力が必要です。'
+                },
+                {
+                    icon: '🔄',
+                    title: '翻訳が同期しなくなる',
+                    desc: 'オリジナルを更新するたびに再翻訳が必要。自動化されたi18nは全バージョンを整合させます。'
+                }
+            ]
+        }
     }
 };
 
@@ -264,6 +329,11 @@ const SKILLS = {
         title: 'Skill Permissions',
         description: '分析 skill 所需权限',
         icon: 'lock'
+    },
+    'skill-i18n': {
+        title: 'Skill i18n',
+        description: '将 SKILL.md 翻译成多语言版本',
+        icon: 'globe'
     }
 };
 
