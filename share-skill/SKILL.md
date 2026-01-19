@@ -544,10 +544,14 @@ Migrate specified skill from `~/.claude/` directory to `{skills_path}/`:
                    { icon: '🔥', title: '...', desc: '...' },
                    { icon: '🧠', title: '...', desc: '...' },
                    { icon: '💥', title: '...', desc: '...' }
+               ],
+               triggers: [
+                   '<natural language example 1>',
+                   '<natural language example 2>'
                ]
            },
-           'zh-CN': { /* Chinese translation */ },
-           ja: { /* Japanese translation */ }
+           'zh-CN': { /* Chinese translation including triggers */ },
+           ja: { /* Japanese translation including triggers */ }
        }
    };
    ```
@@ -1303,17 +1307,29 @@ const SKILL_MARKETING = {
                     title: 'Third Problem',
                     desc: 'Description of the third issue addressed.'
                 }
+            ],
+            triggers: [
+                'Example natural language prompt 1',
+                'Example natural language prompt 2'
             ]
         },
         'zh-CN': {
             headline: '中文标题',
             why: '中文说明...',
-            painPoints: [/* ... */]
+            painPoints: [/* ... */],
+            triggers: [
+                '自然语言触发示例 1',
+                '自然语言触发示例 2'
+            ]
         },
         ja: {
             headline: '日本語タイトル',
             why: '日本語説明...',
-            painPoints: [/* ... */]
+            painPoints: [/* ... */],
+            triggers: [
+                '自然言語トリガー例 1',
+                '自然言語トリガー例 2'
+            ]
         }
     }
 };
@@ -1337,6 +1353,56 @@ function renderMarketingSection(skillName) {
 - `.marketing-why` - Value proposition paragraph
 - `.pain-points-grid` - 3-column responsive grid
 - `.pain-point-card` - Glass card with icon, title, description
+
+**Triggers Section (Natural Language Examples):**
+
+Display 2-3 example phrases users can say to trigger this skill. Shown below pain points.
+
+```javascript
+// triggers field in SKILL_MARKETING
+triggers: [
+    'Help me allocate a port for my project',
+    'Start the dev server for me'
+]
+```
+
+**Render Function for Triggers:**
+
+```javascript
+function renderTriggersSection(skillName) {
+    const marketing = SKILL_MARKETING[skillName];
+    if (!marketing) return '';
+
+    const content = marketing[currentLang] || marketing['en'];
+    if (!content || !content.triggers || content.triggers.length === 0) return '';
+
+    const t = I18N[currentLang];
+
+    const triggersHtml = content.triggers.map(trigger => `
+        <div class="trigger-item">
+            <span class="trigger-quote">"${trigger}"</span>
+        </div>
+    `).join('');
+
+    return `
+        <div class="triggers-section">
+            <h3 class="triggers-title">💬 ${t.triggersTitle}</h3>
+            <p class="triggers-desc">${t.triggersDesc}</p>
+            <div class="triggers-list">
+                ${triggersHtml}
+            </div>
+        </div>
+    `;
+}
+```
+
+**CSS Classes for Triggers:**
+- `.triggers-section` - Container with subtle background
+- `.triggers-title` - Section heading with emoji
+- `.triggers-desc` - Instruction text
+- `.triggers-list` - Vertical list of examples
+- `.trigger-item` - Individual example with left border accent
+- `.trigger-quote` - Italic quoted text
 
 **Guidelines for Writing Marketing Content:**
 1. Write from the user's perspective ("You" not "This skill")
@@ -1397,6 +1463,16 @@ The right sidebar provides quick installation instructions:
     <div class="sidebar-content">
         <div class="sidebar-section">
             <h4 class="sidebar-heading" data-i18n="installation">Installation</h4>
+
+            <!-- Natural language installation recommendation -->
+            <div class="install-natural">
+                <p class="install-natural-desc" data-i18n="installNaturalDesc">We recommend installing via natural language:</p>
+                <div class="install-natural-example">
+                    "<span data-i18n="installNaturalExample">Please help me install this skill:</span> https://github.com/{username}/{repo}"
+                </div>
+            </div>
+
+            <!-- Command line installation -->
             <p class="install-desc" data-i18n="installDesc">The easiest way to install:</p>
             <div class="install-code">
                 <pre><code><span class="comment"># <span data-i18n="addMarketplace">Add marketplace</span></span>
@@ -1411,29 +1487,46 @@ The right sidebar provides quick installation instructions:
 </aside>
 ```
 
-**i18n Support for Installation:**
+**CSS Classes for Natural Language Installation:**
+- `.install-natural` - Container with bottom border separator
+- `.install-natural-desc` - Recommendation text
+- `.install-natural-example` - Quoted example with left border accent
+
+**i18n Support for Installation and Triggers:**
 ```javascript
 const I18N = {
     en: {
         installation: 'Installation',
+        installNaturalDesc: 'We recommend installing via natural language:',
+        installNaturalExample: 'Please help me install this skill:',
         installDesc: 'The easiest way to install:',
         addMarketplace: 'Add marketplace',
         installSkills: 'Install skills',
-        moreOptions: 'More installation options'
+        moreOptions: 'More installation options',
+        triggersTitle: 'How to Use',
+        triggersDesc: 'Trigger this skill with natural language:'
     },
     'zh-CN': {
         installation: '安装方法',
+        installNaturalDesc: '我们推荐使用自然语言安装：',
+        installNaturalExample: '请帮我安装这个 skill：',
         installDesc: '最简单的安装方式：',
         addMarketplace: '添加技能市场',
         installSkills: '安装技能',
-        moreOptions: '更多安装选项'
+        moreOptions: '更多安装选项',
+        triggersTitle: '如何调用',
+        triggersDesc: '使用自然语言即可触发此 skill：'
     },
     ja: {
         installation: 'インストール',
+        installNaturalDesc: '自然言語でのインストールをお勧めします：',
+        installNaturalExample: 'このスキルをインストールしてください：',
         installDesc: '最も簡単なインストール方法：',
         addMarketplace: 'マーケットプレイスを追加',
         installSkills: 'スキルをインストール',
-        moreOptions: 'その他のインストールオプション'
+        moreOptions: 'その他のインストールオプション',
+        triggersTitle: '使い方',
+        triggersDesc: '自然言語でこのスキルを呼び出せます：'
     }
 };
 ```
