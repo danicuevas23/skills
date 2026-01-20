@@ -16,7 +16,7 @@ My collection of custom Claude Code skills for productivity and automation.
 | [share-skill](./share-skill/) | Migrate local skills to code repositories with Git version control and open source support |
 | [skill-permissions](./skill-permissions/) | Analyze skill permissions and generate one-time authorization commands |
 | [skill-i18n](./skill-i18n/) | Translate SKILL.md and README.md files into multiple languages for sharing skills internationally |
-| [ceo-skill](./ceo-skill/) | Intelligent project management dashboard - view all projects status, priorities, and todos from a CEO perspective |
+| [ceo-skill](./ceo-skill/) | CEO-level project dashboard + COO-level API cost analysis with optimization recommendations |
 
 ## Installation
 

@@ -373,8 +373,8 @@ const SKILL_MARKETING = {
     },
     'ceo-skill': {
         en: {
-            headline: 'Manage all your projects like a CEO',
-            why: 'You have 10 projects but no idea which deserves your attention today. You jump between folders, check git logs manually, and forget what you were working on. CEO Skill gives you a bird\'s-eye view of all projects, ranked by ROI and business potential, so you focus on what matters most.',
+            headline: 'Manage projects like a CEO, optimize costs like a COO',
+            why: 'You have 10 projects but no idea which deserves your attention today. Your API bills are growing but you don\'t know which services are eating your budget. CEO Skill gives you a bird\'s-eye view of all projects ranked by ROI, plus COO-level cost analysis with actionable optimization recommendations.',
             painPoints: [
                 {
                     icon: '📊',
@@ -382,25 +382,25 @@ const SKILL_MARKETING = {
                     desc: 'Switching between projects without knowing their status wastes time and mental energy.'
                 },
                 {
+                    icon: '💸',
+                    title: 'API costs out of control',
+                    desc: 'Multiple services across projects add up. COO analysis spots redundancy and suggests 30-50% savings.'
+                },
+                {
                     icon: '🎯',
                     title: 'Wrong priorities',
                     desc: 'Working on low-impact projects while high-value ones collect dust. Smart scoring fixes this.'
-                },
-                {
-                    icon: '🔄',
-                    title: 'Context switching overhead',
-                    desc: 'Every project switch requires remembering where you left off. Cached metrics eliminate this.'
                 }
             ],
             triggers: [
                 'Show me all my projects',
-                'What should I work on today?',
-                'Which project is most important?'
+                'What are my API costs?',
+                'How can I reduce spending?'
             ]
         },
         'zh-CN': {
-            headline: '像 CEO 一样管理你的所有项目',
-            why: '你有 10 个项目，但不知道今天该关注哪个。你在文件夹间跳来跳去，手动检查 git 日志，然后忘了自己在做什么。CEO Skill 让你鸟瞰所有项目，按 ROI 和商业潜力排序，让你专注于最重要的事。',
+            headline: '像 CEO 一样管理项目，像 COO 一样优化成本',
+            why: '你有 10 个项目，但不知道今天该关注哪个。API 账单在增长，但你不知道哪些服务在烧钱。CEO Skill 让你鸟瞰所有项目并按 ROI 排序，还有 COO 级别的成本分析和可操作的优化建议。',
             painPoints: [
                 {
                     icon: '📊',
@@ -408,25 +408,25 @@ const SKILL_MARKETING = {
                     desc: '在不了解状态的情况下切换项目，浪费时间和精力。'
                 },
                 {
+                    icon: '💸',
+                    title: 'API 成本失控',
+                    desc: '多个项目的多个服务叠加起来。COO 分析发现冗余，建议节省 30-50%。'
+                },
+                {
                     icon: '🎯',
                     title: '优先级搞错了',
                     desc: '在低价值项目上工作，而高价值项目落灰。智能评分解决这个问题。'
-                },
-                {
-                    icon: '🔄',
-                    title: '上下文切换开销',
-                    desc: '每次切换项目都要回忆上次做到哪了。缓存机制消除这种开销。'
                 }
             ],
             triggers: [
                 '显示我所有的项目',
-                '今天我应该做什么？',
-                '哪个项目最重要？'
+                '我的 API 成本是多少？',
+                '如何减少开支？'
             ]
         },
         ja: {
-            headline: 'CEOのように全プロジェクトを管理',
-            why: '10個のプロジェクトがあるのに、今日どれに集中すべきかわからない。フォルダ間を行き来し、手動でgitログを確認し、何をしていたか忘れてしまう。CEO Skillは全プロジェクトを俯瞰し、ROIとビジネスポテンシャルでランク付けし、最も重要なことに集中できます。',
+            headline: 'CEOのようにプロジェクト管理、COOのようにコスト最適化',
+            why: '10個のプロジェクトがあるのに、今日どれに集中すべきかわからない。API請求額は増えているが、どのサービスが予算を食っているかわからない。CEO Skillは全プロジェクトをROIでランク付けし、さらにCOOレベルのコスト分析と実行可能な最適化提案を提供します。',
             painPoints: [
                 {
                     icon: '📊',
@@ -434,20 +434,20 @@ const SKILL_MARKETING = {
                     desc: '状況を把握せずにプロジェクトを切り替えると、時間と精神的エネルギーを浪費します。'
                 },
                 {
+                    icon: '💸',
+                    title: 'APIコストが制御不能',
+                    desc: '複数プロジェクトの複数サービスが積み重なる。COO分析で冗長性を発見し、30-50%の削減を提案。'
+                },
+                {
                     icon: '🎯',
                     title: '優先順位の間違い',
                     desc: '価値の低いプロジェクトに取り組み、高価値のものが放置される。スマートスコアリングで解決。'
-                },
-                {
-                    icon: '🔄',
-                    title: 'コンテキスト切り替えのオーバーヘッド',
-                    desc: 'プロジェクト切り替えのたびに前回の状態を思い出す必要がある。キャッシュがこれを解消。'
                 }
             ],
             triggers: [
                 '全プロジェクトを見せて',
-                '今日は何に取り組むべき？',
-                'どのプロジェクトが最も重要？'
+                'APIコストはいくら？',
+                '支出を減らすには？'
             ]
         }
     }
@@ -477,7 +477,7 @@ const SKILLS = {
     },
     'ceo-skill': {
         title: 'CEO Skill',
-        description: 'CEO 视角的项目管理仪表盘',
+        description: 'CEO 视角的项目管理 + COO 级成本分析',
         icon: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'
     }
 };

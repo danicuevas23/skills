@@ -71,6 +71,10 @@ Evaluate launch readiness:
 | `/ceo <name>` | View detailed info for a specific project |
 | `/ceo todo <name>` | Manage project TODOs |
 | `/ceo jump <name>` | Generate terminal command to open project in new Claude Code |
+| `/ceo costs` | Show API cost overview for all projects |
+| `/ceo costs <name>` | Detailed cost analysis for a specific project |
+| `/ceo costs refresh` | Force rescan of all API services |
+| `/ceo costs set <project> <service> <amount>` | Manually set actual monthly cost |
 
 ## Triggers
 
@@ -701,3 +705,250 @@ Quick Jump: cd ~/Codes/saifuri && claude
 3. **Partial name match** - Project names can be matched partially
 4. **Project-level override** - Use `.claude/dashboard.json` in project for custom settings
 5. **Clipboard support** - Jump commands are auto-copied on macOS
+
+## API Cost Tracking
+
+Track estimated monthly costs for external API services across all projects.
+
+### COO Role Setting
+
+When analyzing API costs, you adopt the persona of:
+
+**A seasoned Chief Operating Officer (COO)** who has:
+- 15+ years of experience in operational cost optimization
+- Successfully reduced operational expenses by 30-50% at multiple companies
+- Deep expertise in cloud infrastructure cost management
+- Sharp instincts for identifying wasteful spending and redundant services
+- Experience negotiating enterprise contracts with major vendors
+
+**Your analysis mindset:**
+- Every dollar spent should have measurable ROI
+- Free tiers and open-source alternatives should be maximized before paying
+- Redundant services across projects are opportunities for consolidation
+- AI costs are the new "cloud bill" - they need the same scrutiny
+- Always question: "Is this service essential? Can we self-host? Can we batch requests?"
+
+**For each project, you must evaluate:**
+1. **Cost Normality** - Is this spending level appropriate for the project's stage and scale?
+2. **Optimization Opportunities** - Specific, actionable recommendations to reduce costs
+
+**Cost benchmarks by project stage:**
+| Stage | Monthly API Budget | Guidance |
+|-------|-------------------|----------|
+| Side project / Hobby | $0-20 | Should use only free tiers |
+| MVP / Early startup | $20-100 | Minimal paid services, validate before scaling |
+| Growth stage | $100-500 | Optimize before adding new services |
+| Production / Scale | $500+ | Requires cost monitoring and alerts |
+
+### Pricing Database
+
+API pricing data is stored in `~/.claude/api-pricing.json` with the following structure:
+
+```json
+{
+  "services": {
+    "anthropic": {
+      "name": "Anthropic (Claude AI)",
+      "category": "ai",
+      "env_patterns": ["ANTHROPIC_API_KEY", "CLAUDE_API_KEY"],
+      "estimated_monthly": { "low": 10, "medium": 100, "high": 1500 }
+    }
+  }
+}
+```
+
+### Supported Services
+
+| Service | Category | Detection Method | Est. Monthly (Low/Med/High) |
+|---------|----------|------------------|----------------------------|
+| Anthropic (Claude) | AI | `ANTHROPIC_API_KEY` | $10 / $100 / $1,500 |
+| OpenAI | AI | `OPENAI_API_KEY` | $5 / $50 / $500 |
+| Supabase | Database | `SUPABASE_URL` | $0 / $25 / $599 |
+| Alchemy | Blockchain | `ALCHEMY_API_KEY` | $0 / $49 / $199 |
+| Pimlico | Blockchain | `PIMLICO_API_KEY` | $0 / $99 / $99 |
+| Mapbox | Maps | `MAPBOX_TOKEN` | $0 / $20 / $200 |
+| OpenWeather | Weather | `OPENWEATHER_API_KEY` | $0 / $40 / $180 |
+| Formspree | Forms | `FORMSPREE_ID` | $0 / $10 / $50 |
+| Cloudflare Workers | Serverless | `wrangler.toml` | $0 / $5 / $25 |
+| Cloudflare D1 | Database | `d1_databases` in wrangler.toml | $0 / $5 / $20 |
+| WalletConnect | Blockchain | `WALLETCONNECT_PROJECT_ID` | $0 / $0 / $0 |
+| Stripe | Payments | `STRIPE_SECRET_KEY` | $0 / $50 / $500 |
+| Resend | Email | `RESEND_API_KEY` | $0 / $20 / $100 |
+| Vercel | Hosting | `vercel.json` | $0 / $20 / $100 |
+| Sentry | Monitoring | `SENTRY_DSN` | $0 / $26 / $80 |
+
+### Detection Algorithm
+
+1. **Scan `.env.example` files** - Extract variable names only (never read actual secrets)
+2. **Match patterns** - Compare variable names against `env_patterns` in pricing database
+3. **Check config files** - Detect `wrangler.toml` for Cloudflare services, `vercel.json` for Vercel
+4. **Calculate estimates** - Sum up low/medium/high estimates for all detected services
+
+```bash
+# Find env example files (safe - no secrets)
+find <project> -name ".env.example" -not -path "*/node_modules/*"
+
+# Extract variable names only (left side of =)
+grep -E "^[A-Z][A-Z0-9_]+=" .env.example | cut -d'=' -f1
+
+# Detect Cloudflare D1
+grep -q "d1_databases" wrangler.toml && echo "cloudflare_d1"
+```
+
+### Privacy Protection
+
+**IMPORTANT**: This feature NEVER reads actual API keys or secrets.
+
+- Only scans `.env.example` (template files, not actual `.env`)
+- Only extracts variable names (content before `=`)
+- All estimates are based on publicly available pricing information
+- Users can manually override estimates with actual costs
+
+### Cache Structure
+
+Each project in `ceo-dashboard.json` includes `api_costs`:
+
+```json
+{
+  "projects": {
+    "saifuri": {
+      "api_costs": {
+        "last_scan": "2026-01-20T10:30:00Z",
+        "detected_services": [
+          { "service_id": "anthropic", "env_var": "ANTHROPIC_API_KEY" },
+          { "service_id": "supabase", "env_var": "SUPABASE_URL" }
+        ],
+        "manual_overrides": {
+          "anthropic": 150
+        },
+        "total_estimated": { "low": 10, "medium": 248, "high": 1699 }
+      }
+    }
+  }
+}
+```
+
+### Command: `/ceo costs`
+
+Display API cost overview for all projects.
+
+**Output format:**
+
+```
+╔════════════════════════════════════════════════════════════════════╗
+║                   API Cost Overview - 2026-01-20                   ║
+╚════════════════════════════════════════════════════════════════════╝
+
+  Project      │ Services │ Est. Monthly (Low/Med/High)  │ Top Cost
+ ──────────────┼──────────┼──────────────────────────────┼───────────
+  saifuri      │    4     │ $10 / $248 / $1,699          │ Anthropic
+  m0rphic      │    4     │ $0 / $135 / $1,550           │ Anthropic
+  menkr        │    4     │ $0 / $45 / $380              │ Mapbox
+ ──────────────┼──────────┼──────────────────────────────┼───────────
+  TOTAL        │   12     │ $10 / $428 / $3,629          │
+
+💡 AI services account for 85% of estimated costs
+
+Cost breakdown by category:
+  AI:         $300/mo (70%)
+  Blockchain: $100/mo (23%)
+  Database:   $25/mo (6%)
+  Other:      $3/mo (1%)
+```
+
+### Command: `/ceo costs <name>`
+
+Detailed cost analysis for a specific project with COO evaluation.
+
+**Output format:**
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  API COSTS: SAIFURI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Last scanned: 2026-01-20 10:30
+
+  Detected Services (4):
+  ──────────────────────────────────────────────────────────────────
+  Service          │ Env Variable        │ Low    │ Medium │ High
+  ──────────────────────────────────────────────────────────────────
+  Anthropic        │ ANTHROPIC_API_KEY   │ $10    │ $100   │ $1,500
+  Supabase         │ SUPABASE_URL        │ $0     │ $25    │ $599
+  Alchemy          │ ALCHEMY_API_KEY     │ $0     │ $49    │ $199
+  Pimlico          │ PIMLICO_API_KEY     │ $0     │ $99    │ $99
+  ──────────────────────────────────────────────────────────────────
+  TOTAL            │                     │ $10    │ $273   │ $2,397
+
+  Manual Overrides:
+    None set (use /ceo costs set saifuri <service> <amount>)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🎯 COO EVALUATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Project Stage:    MVP / Early Startup
+  Budget Benchmark: $20-100/mo
+  Current Estimate: ~$273/mo (Medium)
+
+  📊 COST ASSESSMENT: ⚠️ ABOVE NORMAL
+
+  For an MVP-stage project, $273/mo is on the higher side.
+  The AI service costs alone may eat into your runway.
+
+  💡 OPTIMIZATION RECOMMENDATIONS:
+  ──────────────────────────────────────────────────────────────────
+
+  1. [HIGH IMPACT] Anthropic API - $100/mo
+     → Use Haiku ($0.25/1M) instead of Sonnet ($3/1M) for routine tasks
+     → Implement response caching for repeated queries
+     → Batch similar requests to reduce API calls
+     → Potential savings: 40-60% ($40-60/mo)
+
+  2. [MEDIUM IMPACT] Pimlico - $99/mo
+     → Evaluate if bundler service is needed at MVP stage
+     → Consider using free tier limits more efficiently
+     → Potential savings: $99/mo if deferred
+
+  3. [LOW IMPACT] Alchemy - $49/mo
+     → Free tier offers 300M compute units/mo
+     → Ensure you're not duplicating RPC calls
+     → Consider using public RPC for non-critical reads
+
+  4. [OK] Supabase - $25/mo
+     → Pro plan is reasonable for production database
+     → Monitor row counts to stay within limits
+
+  ──────────────────────────────────────────────────────────────────
+  📉 TOTAL POTENTIAL SAVINGS: $140-160/mo (51-59%)
+  ──────────────────────────────────────────────────────────────────
+```
+
+### Command: `/ceo costs refresh`
+
+Force rescan all API services across all projects, bypassing cache.
+
+### Command: `/ceo costs set <project> <service> <amount>`
+
+Manually set actual monthly cost for a service.
+
+```
+/ceo costs set saifuri anthropic 150
+
+✓ Set saifuri.anthropic actual cost to $150/mo
+  (Previous estimate: $100/mo medium tier)
+```
+
+### Dashboard Integration
+
+The main dashboard includes an `Est.Cost` column:
+
+```
+  #  │ Project      │ Score │ APIs │ Est.Cost │ Active
+ ────┼──────────────┼───────┼──────┼──────────┼─────────
+  1  │ saifuri      │  92.3 │  4   │ ~$248/mo │ 2h ago
+  2  │ kimeeru      │  78.0 │  3   │ ~$10/mo  │ 1d ago
+  3  │ menkr        │  65.5 │  4   │ ~$45/mo  │ 3d ago
+```
+
+The cost shown is the "medium" estimate unless manual overrides are set.

@@ -16,7 +16,7 @@
 | [share-skill](./share-skill/) | 将本地技能迁移到代码仓库，支持 Git 版本管理和开源 |
 | [skill-permissions](./skill-permissions/) | 分析技能所需权限，生成一次性授权命令 |
 | [skill-i18n](./skill-i18n/) | 将 SKILL.md 和 README.md 翻译成多语言版本，便于国际化分享技能 |
-| [ceo-skill](./ceo-skill/) | 智能项目管理仪表盘 - 以 CEO 视角查看所有项目状态、优先级和待办事项 |
+| [ceo-skill](./ceo-skill/) | CEO 级项目仪表盘 + COO 级 API 成本分析与优化建议 |
 
 ## 安装方法
 

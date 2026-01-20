@@ -16,7 +16,7 @@
 | [share-skill](./share-skill/) | ローカルスキルをコードリポジトリに移行、Git バージョン管理とオープンソース対応 |
 | [skill-permissions](./skill-permissions/) | スキルの必要な権限を分析し、ワンタイム認証コマンドを生成 |
 | [skill-i18n](./skill-i18n/) | SKILL.md と README.md を複数言語に翻訳し、スキルの国際共有を容易に |
-| [ceo-skill](./ceo-skill/) | インテリジェントなプロジェクト管理ダッシュボード - CEOの視点から全プロジェクトの状態、優先度、タスクを確認 |
+| [ceo-skill](./ceo-skill/) | CEOレベルのプロジェクトダッシュボード + COOレベルのAPIコスト分析と最適化提案 |
 
 ## インストール
 
