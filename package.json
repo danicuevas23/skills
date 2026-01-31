@@ -1,6 +1,6 @@
 {
   "name": "Verificacion Bot",
-  "version": "v16.20.2",
+  "version": "v20.19.0",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
